@@ -1,15 +1,24 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:medappjp/components/grid_container.dart';
 import 'package:medappjp/components/search_field_homepage.dart';
-import 'package:medappjp/src/product_detail.dart';
 import 'package:medappjp/src/profile_user.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  final String customerName;
+  const HomePage({Key? key, required this.customerName}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
+    List<Widget> cartItems = [];
+    int badgeNumber = cartItems.length;
+    int priceOfProduct = 550;
     return Scaffold(
       body: Stack(
         children: [
@@ -200,44 +209,27 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      ItemOfGrid(),
-                      SizedBox(
-                        width: 14,
-                      ),
-                      ItemOfGrid(),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      ItemOfGrid(),
-                      SizedBox(
-                        width: 14,
-                      ),
-                      ItemOfGrid(),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      ItemOfGrid(),
-                      SizedBox(
-                        width: 14,
-                      ),
-                      ItemOfGrid(),
-                    ],
-                  ),
+                  //GridView
+                  GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 30,
+                    itemBuilder: (context, index) => ItemOfGrid(
+                      priceOfProduct: priceOfProduct,
+                      cartItems: cartItems,
+                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      mainAxisExtent: 260,
+                    ),
+                  )
                 ],
               ),
             ),
           ),
-          //appbar 
+          //appbar
           Container(
             height: 190,
             decoration: BoxDecoration(
@@ -268,21 +260,21 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       Spacer(),
-                      Image.asset("assets/bell.png"),
+                      Badge(
+                        onTap: () {
+                          print(cartItems.length);
+                          setState(() {});
+                        },
+                        badgeContent: Text("${badgeNumber}"),
+                        child: Icon(
+                          Icons.notifications,
+                          color: Colors.white,
+                        ),
+                      ),
                       SizedBox(
                         width: 16,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ProductDetails(),
-                            ),
-                          );
-                        },
-                        child: Image.asset("assets/cart.png"),
-                      ),
+                      Image.asset("assets/cart.png"),
                     ],
                   ),
                 ),
@@ -292,7 +284,7 @@ class HomePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 22),
                   child: Text(
-                    "Hi, Muhammad Ali",
+                    "Hi, ${widget.customerName}",
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.white,

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CustomizedField extends StatelessWidget {
+class CustomizedField extends StatefulWidget {
   final String placeholder;
+  CustomizedField({required this.placeholder});
 
-  const CustomizedField({required this.placeholder});
+  @override
+  State<CustomizedField> createState() => _CustomizedFieldState();
+}
+
+class _CustomizedFieldState extends State<CustomizedField> {
+  TextEditingController enterNumberControl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +21,7 @@ class CustomizedField extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Color.fromARGB(255, 8, 8, 9), width: 1)),
       child: TextFormField(
+        controller: enterNumberControl,
         keyboardType: TextInputType.number,
         cursorColor: Colors.black,
         style: const TextStyle(
@@ -22,7 +29,7 @@ class CustomizedField extends StatelessWidget {
           fontSize: 20,
         ),
         decoration: InputDecoration(
-            hintText: placeholder,
+            hintText: widget.placeholder,
             hintStyle: const TextStyle(
               color: Color(0xff8f8f9e),
               fontSize: 15,

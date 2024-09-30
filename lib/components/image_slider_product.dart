@@ -1,10 +1,20 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:medappjp/src/cart_page.dart';
 
-class ImageSliderProduct extends StatelessWidget {
-  const ImageSliderProduct({Key? key}) : super(key: key);
+class ImageSliderProduct extends StatefulWidget {
+  final int priceOfProduct;
+  final Function() onAddToCart;
+  const ImageSliderProduct(
+      {Key? key, required this.priceOfProduct, required this.onAddToCart})
+      : super(key: key);
 
+  @override
+  State<ImageSliderProduct> createState() => _ImageSliderProductState();
+}
+
+class _ImageSliderProductState extends State<ImageSliderProduct> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,7 +59,7 @@ class ImageSliderProduct extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Rs 99",
+                      "RS.1800",
                       style: TextStyle(
                         fontSize: 18,
                         color: Color.fromARGB(255, 191, 174, 174),
@@ -60,7 +70,7 @@ class ImageSliderProduct extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      "Rs 99",
+                      "Rs.${widget.priceOfProduct.toString()}",
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -77,22 +87,25 @@ class ImageSliderProduct extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Row(
-              children: [
-                Icon(
-                  Icons.add_box_rounded,
-                  color: Colors.blue,
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  "Add to Cart",
-                  style: TextStyle(
+            GestureDetector(
+              onTap: widget.onAddToCart,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.add_box_rounded,
                     color: Colors.blue,
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 6,
+                  ),
+                  Text(
+                    "Add to Cart",
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

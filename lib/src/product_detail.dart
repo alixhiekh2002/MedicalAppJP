@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:medappjp/components/add_to_cart_products.dart';
 import 'package:medappjp/components/buttonone.dart';
 import 'package:medappjp/components/image_slider_product.dart';
 import 'package:medappjp/src/cart_page.dart';
 
-class ProductDetails extends StatelessWidget {
-  const ProductDetails({Key? key}) : super(key: key);
+class ProductDetails extends StatefulWidget {
+  final List<Widget> cartItems;
+  final int priceOfProduct;
 
+  const ProductDetails({Key? key, required this.priceOfProduct, required this.cartItems})
+      : super(key: key);
+
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
+  // List<Widget> cartItems = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +27,11 @@ class ProductDetails extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.arrow_back),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(Icons.arrow_back)),
                 Spacer(),
                 Image(
                   image: AssetImage("assets/bell.png"),
@@ -42,7 +57,17 @@ class ProductDetails extends StatelessWidget {
               "Lorem ispum 19",
               style: TextStyle(fontSize: 14, color: Colors.grey[400]),
             ),
-            ImageSliderProduct(),
+            ImageSliderProduct(
+                priceOfProduct: widget.priceOfProduct,
+                onAddToCart: () {
+                  widget.cartItems.add(
+                    ListingProducts(
+                      newPrice: 0,
+                      capacity: 0,
+                      price: widget.priceOfProduct.toString(),
+                    ),
+                  );
+                }),
             SizedBox(
               height: 30,
             ),
@@ -52,7 +77,9 @@ class ProductDetails extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => CartPage(),
+                    builder: (_) => CartPage(
+                      cartItemss: widget.cartItems,
+                    ),
                   ),
                 );
               },
